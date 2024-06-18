@@ -1,15 +1,39 @@
-name: CI
+name: Java CI with Gradle
 # 동작 조건
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  # 프로젝트 빌드
+  # 자바 빌드 
   build-docker-image:
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v3
+      # 0. gradlew 권한
+      - name: Run chmod to make gradlew executable
+        run: chmod +x ./gradlew
+      # 1. Java 17 세팅
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      # 1-1. Application Properties 세팅
+      - name: make application-prod.properties
+        run: |
+            mkdir ./src/main/resources
+            cd ./src/main/resources
+            touch ./application.properties
+            echo "${{ secrets.APPLICATION_PROPERTIES_DEV }}" > ./application.properties
+        shell: bash
+      
+      # 2. Spring Boot 애플리케이션 빌드
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: clean bootJar
+  
       # 3. Docker 이미지 빌드
       - name: docker image build
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/community_batch .
@@ -24,7 +48,8 @@ jobs:
       # 5. Docker Hub 이미지 푸시
       - name: docker Hub push
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/community_batch
-# 푸시한 이미지를 ec2에서 풀 & 실행 
+
+  # 푸시한 이미지를 ec2에서 풀 & 실행 
   run-docker-image-on-ec2:
     needs: build-docker-image
     runs-on: self-hosted
@@ -39,7 +64,7 @@ jobs:
 
       # 3. 최신 이미지를 실행시킵니다
       - name: docker run new container
-        run: sudo docker run --name community_batch --rm -d -p 8000:8000 ${{ secrets.DOCKERHUB_USERNAME }}/community_batch
+        run: sudo docker run --name community_batch --rm -d -p 8000:8080 ${{ secrets.DOCKERHUB_USERNAME }}/community_batch
 
       # 4. 미사용 이미지를 정리
       - name: delete old docker image
