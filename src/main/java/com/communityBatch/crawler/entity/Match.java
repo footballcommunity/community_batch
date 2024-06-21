@@ -3,13 +3,14 @@ package com.communityBatch.crawler.entity;
 import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Builder
 @Getter
 public class Match {
     private Long id;
     private String title;
-    private LocalDateTime time;
+    private ZonedDateTime time;
     private String address;
     private int price;
     private String info;
@@ -38,7 +39,7 @@ public class Match {
         return Match.builder()
                 .id(plabMatch.getId())
                 .title(plabMatch.getLabel_title())
-                .time(plabMatch.getSchedule().toLocalDateTime())
+                .time(plabMatch.getSchedule())
                 .address(plabMatch.getLabel_stadium())
                 .price(plabMatch.getFee())
                 .sex(plabMatch.getSex())
