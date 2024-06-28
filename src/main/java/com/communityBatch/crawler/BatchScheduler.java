@@ -21,7 +21,7 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final PlabCrawlingJobConfig plabCrawlingJobConfig;
 
-    @Scheduled(cron = "0 15 15 * * *") // 자정
+    @Scheduled(cron = "20 * * * *") // **시 20분
     public void runJob(){
         Map<String, JobParameter<?>> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis(),Long.class));
@@ -38,5 +38,7 @@ public class BatchScheduler {
             throw new RuntimeException(e);
         }
     }
+
+
 
 }

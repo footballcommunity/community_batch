@@ -47,10 +47,10 @@ public class Match {
                 .link(LINK_URL+plabMatch.getId())
                 .build();
     }
-    public static Match from(IamGroundMatch iamGroundMatch){
-        String LINK_URL = "https://m.iamground.kr/futsal/s_match/detail/";
-        return Match.builder()
-                .link(LINK_URL)
-                .build();
-    }
+//    public static Match from(IamGroundMatch iamGroundMatch){
+//        String LINK_URL = "https://m.iamground.kr/futsal/s_match/detail/";
+//        return Match.builder()
+//                .link(LINK_URL)
+//                .build();
+//    }
 }
