@@ -15,8 +15,6 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
@@ -78,7 +76,13 @@ public class PlabCrawlingJobConfig {
     @Bean
     @StepScope
     public ItemProcessor<PlabMatch, Match> plabMatchToMatchProcessor(){
-        return new PlabToMatchProcessor();
+        ItemProcessor<PlabMatch, Match> itemProcessor = new ItemProcessor() {
+            @Override
+            public Object process(Object item) throws Exception {
+                return Match.from((PlabMatch) item);
+            }
+        };
+        return itemProcessor;
     }
 
 

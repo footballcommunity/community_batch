@@ -29,7 +29,6 @@ public class Match {
                 "status : " + status + "\n" +
                 "link : " + link + "\n";
     }
-
     public static Match from(PlabMatch plabMatch){
         String LINK_URL = "https://www.plabfootball.com/match/";
         String info = "인원 : " + (plabMatch.getMax_player_cnt() - plabMatch.getConfirm_cnt()) + "\n" +
@@ -44,8 +43,14 @@ public class Match {
                 .price(plabMatch.getFee())
                 .sex(plabMatch.getSex())
                 .info(info)
-                .status(plabMatch.getStatus())
+                .status(plabMatch.getApply_status())
                 .link(LINK_URL+plabMatch.getId())
+                .build();
+    }
+    public static Match from(IamGroundMatch iamGroundMatch){
+        String LINK_URL = "https://m.iamground.kr/futsal/s_match/detail/";
+        return Match.builder()
+                .link(LINK_URL)
                 .build();
     }
 }
