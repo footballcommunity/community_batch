@@ -43,7 +43,7 @@ public class Match {
                 .price(plabMatch.getFee())
                 .sex(plabMatch.getSex())
                 .info(info)
-                .status(plabMatch.getApply_status())
+                .status(plabMatch.getApply_status().toUpperCase())
                 .link(LINK_URL+plabMatch.getId())
                 .build();
     }
