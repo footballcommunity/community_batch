@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Getter
@@ -13,7 +14,7 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlabMatch {
     private Long id;
-    private ZonedDateTime schedule;
+    private LocalDateTime schedule;
     private String label_title;
     private int sex;
     private int level;
@@ -34,8 +35,8 @@ public class PlabMatch {
     private String intro;
     private String label_stadium;
     private String label_stadium2;
-    private ZonedDateTime start_dt;
-    private ZonedDateTime end_dt;
+    private LocalDateTime start_dt;
+    private LocalDateTime end_dt;
     private String stud;
     private String grade;
     private String label_manager_name;

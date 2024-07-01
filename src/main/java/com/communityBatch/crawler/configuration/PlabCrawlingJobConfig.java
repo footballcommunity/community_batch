@@ -92,8 +92,8 @@ public class PlabCrawlingJobConfig {
         return new JdbcBatchItemWriterBuilder<Match>()
                 .dataSource(mysqlDataSource)
                 .beanMapped()
-                .sql("INSERT INTO `match` (id, title, time, address, price, info, status, link, sex) " +
-                        "VALUES (:id, :title, :time, :address, :price, :info, :status, :link, :sex) " +
+                .sql("INSERT INTO `match` (title, time, address, price, info, status, link, sex, type) " +
+                        "VALUES (:title, :time, :address, :price, :info, :status, :link, :sex, :type) " +
                         "ON DUPLICATE KEY UPDATE status=VALUES(status), info=VALUES(info)")
                 .build();
     }

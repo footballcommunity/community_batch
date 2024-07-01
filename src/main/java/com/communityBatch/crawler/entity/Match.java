@@ -10,13 +10,14 @@ import java.time.ZonedDateTime;
 public class Match {
     private Long id;
     private String title;
-    private ZonedDateTime time;
+    private LocalDateTime time;
     private String address;
     private int price;
     private String info;
     private String status;
     private String link;
     private int sex;
+    private String type;
 
     @Override
     public String toString() {
@@ -38,13 +39,14 @@ public class Match {
         return Match.builder()
                 .id(plabMatch.getId())
                 .title(plabMatch.getLabel_title())
-                .time(plabMatch.getSchedule())
+                .time(plabMatch.getStart_dt())
                 .address(plabMatch.getLabel_stadium())
                 .price(plabMatch.getFee())
                 .sex(plabMatch.getSex())
                 .info(info)
                 .status(plabMatch.getApply_status().toUpperCase())
                 .link(LINK_URL+plabMatch.getId())
+                .type("PLAB")
                 .build();
     }
 //    public static Match from(IamGroundMatch iamGroundMatch){
