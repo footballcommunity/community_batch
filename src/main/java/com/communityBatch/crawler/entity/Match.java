@@ -18,7 +18,8 @@ public class Match {
     private String link;
     private int sex;
     private String type;
-
+    private int total_cnt;
+    private int current_cnt;
     @Override
     public String toString() {
         return  "id : " + id + "\n" +
@@ -47,6 +48,8 @@ public class Match {
                 .status(plabMatch.getApply_status().toUpperCase())
                 .link(LINK_URL+plabMatch.getId())
                 .type("PLAB")
+                .total_cnt(plabMatch.getMax_player_cnt())
+                .current_cnt(plabMatch.getConfirm_cnt())
                 .build();
     }
 //    public static Match from(IamGroundMatch iamGroundMatch){
