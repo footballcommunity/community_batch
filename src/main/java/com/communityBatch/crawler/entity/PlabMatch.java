@@ -14,7 +14,7 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlabMatch {
     private Long id;
-    private LocalDateTime schedule;
+    private ZonedDateTime schedule;
     private String label_title;
     private int sex;
     private int level;
