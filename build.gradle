@@ -39,7 +39,8 @@ dependencies {
 	implementation 'commons-io:commons-io:2.16.1'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1'
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
-
+	//JSON
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 }
 

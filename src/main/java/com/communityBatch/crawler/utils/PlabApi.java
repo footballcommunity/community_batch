@@ -36,7 +36,7 @@ public class PlabApi {
                 if(entity == null){
                     return new ArrayList<>();
                 }
-                return objectMapper.readValue(entity.getContent(), new TypeReference<>(){});
+                return objectMapper.readValue(entity.getContent(), new TypeReference<List<PlabMatch>>(){});
             } else{
                 log.error("http failed with status {}", status);
                 log.error("msg : {}", response.getEntity().getContent());

@@ -21,13 +21,14 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final PlabCrawlingJobConfig plabCrawlingJobConfig;
 
-    @Scheduled(cron = "0 20 * * * *") // **시 20분
+    @Scheduled(cron = "0 0 2 * * *")
     public void runJob(){
         Map<String, JobParameter<?>> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis(),Long.class));
         JobParameters jobParameters = new JobParameters(confMap);
         try {
-            jobLauncher.run(plabCrawlingJobConfig.plabCrawl(), jobParameters);
+            jobLauncher.
+                    run(plabCrawlingJobConfig.plabCrawl(), jobParameters);
         } catch (JobExecutionAlreadyRunningException e) {
             throw new RuntimeException(e);
         } catch (JobRestartException e) {
@@ -38,7 +39,5 @@ public class BatchScheduler {
             throw new RuntimeException(e);
         }
     }
-
-
 
 }

@@ -1,120 +1,87 @@
 package com.communityBatch.crawler.entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
+import com.communityBatch.crawler.entity.plabEnums.Sex;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlabMatch {
+    private static String LINK_URL = "https://www.plabfootball.com/match/";
+    private static String TYPE = "PLAB";
     private Long id;
-    private ZonedDateTime schedule;
-    private String label_title;
-    private int sex;
-    private int level;
-    private int player_cnt;
-    private String inout_door;
-    private boolean is_add;
-    private boolean is_rec;
-    private boolean is_new_stadium;
-    private String type;
-    private String test_type;
-    private int confirm_cnt;
-    private int max_player_cnt;
-    private int min_player_cnt;
-    private int fee;
-    private int playtime;
-    private int playminute;
-    private boolean is_manager_free;
-    private String intro;
-    private String label_stadium;
-    private String label_stadium2;
-    private LocalDateTime start_dt;
-    private LocalDateTime end_dt;
-    private String stud;
-    private String grade;
-    private String label_manager_name;
-    private boolean is_asd;
-    private boolean is_replab;
-    private boolean is_earlybird;
-    private boolean is_super_sub;
-    private boolean is_coupon;
-    private boolean is_timesale;
-    private boolean is_apply;
-    private String available_day;
-    private boolean is_parking_apply;
-    private int parking_cnt;
-    private boolean is_finish;
+    private String title;
+    private String startTime;
+    private String hours;
+    private String address;
+    private String price;
+    private String info;
     private String status;
-    private String apply_status;
-    private String label_title2;
-    private String add_title;
-    private String label_schedule9;
-    private Long stadium_group_id;
-    private String stadium_group_name;
-    private String area_group_name;
-    private String area_name;
-    private Long manager_id;
-    private String product_type;
+    private String link;
+    private String sex;
 
-    @Override
-    public String toString() {
-        return "PlabMatch{" +
-                "id=" + id +
-                ", schedule=" + schedule +
-                ", label_title='" + label_title + '\'' +
-                ", sex=" + sex +
-                ", level=" + level +
-                ", player_cnt=" + player_cnt +
-                ", inout_door='" + inout_door + '\'' +
-                ", is_add=" + is_add +
-                ", is_rec=" + is_rec +
-                ", is_new_stadium=" + is_new_stadium +
-                ", type='" + type + '\'' +
-                ", test_type='" + test_type + '\'' +
-                ", confirm_cnt=" + confirm_cnt +
-                ", max_player_cnt=" + max_player_cnt +
-                ", min_player_cnt=" + min_player_cnt +
-                ", fee=" + fee +
-                ", playtime=" + playtime +
-                ", playminute=" + playminute +
-                ", is_manager_free=" + is_manager_free +
-                ", intro='" + intro + '\'' +
-                ", label_stadium='" + label_stadium + '\'' +
-                ", label_stadium2='" + label_stadium2 + '\'' +
-                ", start_dt=" + start_dt +
-                ", end_dt=" + end_dt +
-                ", stud='" + stud + '\'' +
-                ", grade='" + grade + '\'' +
-                ", label_manager_name='" + label_manager_name + '\'' +
-                ", is_asd=" + is_asd +
-                ", is_replab=" + is_replab +
-                ", is_earlybird=" + is_earlybird +
-                ", is_super_sub=" + is_super_sub +
-                ", is_coupon=" + is_coupon +
-                ", is_timesale=" + is_timesale +
-                ", is_apply=" + is_apply +
-                ", available_day='" + available_day + '\'' +
-                ", is_parking_apply=" + is_parking_apply +
-                ", parking_cnt=" + parking_cnt +
-                ", is_finish=" + is_finish +
-                ", status='" + status + '\'' +
-                ", apply_status='" + apply_status + '\'' +
-                ", label_title2='" + label_title2 + '\'' +
-                ", add_title='" + add_title + '\'' +
-                ", label_schedule9='" + label_schedule9 + '\'' +
-                ", stadium_group_id=" + stadium_group_id +
-                ", stadium_group_name='" + stadium_group_name + '\'' +
-                ", area_group_name='" + area_group_name + '\'' +
-                ", area_name='" + area_name + '\'' +
-                ", manager_id=" + manager_id +
-                ", product_type='" + product_type + '\'' +
-                '}';
+    public LocalDateTime timeStringToLocalDateTime(){
+        // 7월 7일 일요일 14:00
+        String [] splitted = startTime.split(" ");
+        int year = LocalDateTime.now().getYear();
+        int month = Integer.parseInt(splitted[0].substring(0,1));
+        int dayOfMonth = Integer.parseInt(splitted[1].substring(0,1));
+        int hour = Integer.parseInt(splitted[3].substring(0,2));
+        int minute = Integer.parseInt(splitted[3].substring(3,5));
+        return LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+    }
+
+
+    public LocalDateTime addHoursTotimeString(){
+        LocalDateTime time = timeStringToLocalDateTime();
+        time.plusHours(Integer.parseInt(hours.substring(2,3)));
+        return time;
+    }
+
+    public int parseSex(){
+        switch (sex){
+            case "남자":
+                return 1;
+            case "여자":
+                return -1;
+            case "남녀모두":
+                return 0;
+            default:
+                throw new RuntimeException();
+        }
+    }
+
+    public String parseStatus(){
+        switch (status){
+            case "신청가능":
+            case "마감임박":
+                return "AVAILABLE";
+            default:
+                return "FULL";
+        }
+    }
+
+
+    public Match toMatch(){
+        return Match.builder()
+                .id(id)
+                .title(title)
+                .startTime(timeStringToLocalDateTime())
+                .endTime(addHoursTotimeString())
+                .address(address)
+                .price(Integer.parseInt(String.join("",price.substring(0,price.length()-1).split(","))))
+                .sex(parseSex())
+                .info(info)
+                .status(parseStatus())
+                .link(LINK_URL+id)
+                .type(TYPE)
+                .total_cnt(-1)
+                .current_cnt(-1)
+                .build();
     }
 }
